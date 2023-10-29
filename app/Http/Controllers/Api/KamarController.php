@@ -6,13 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Validator;
-use App\Models\Jenis_Kamar; 
+use App\Models\Kamar; 
 
 class KamarController extends Controller
 {
     public function index()
     {
-        $kamars = Jenis_Kamar::all();
+        $kamars = Kamar::with('jenis_kamar')->get();
 
         if (count($kamars) > 0) {
             return response([
@@ -31,18 +31,16 @@ class KamarController extends Controller
     {
         $storeData = $request->all();
         $validate = Validator::make($storeData, [
-            'jenis_kamar' => 'required',
-            'tipe_ranjang' => 'required',
-            'fasilitas' => 'required',
-            'harga' => 'required',
-            'luas_kamar' => 'required',
-            'kapasitas' => 'required',
+            'nomor_kamar' => 'required|unique:kamar',
+            'id_jenis' => 'required',
         ]);
 
         if ($validate->fails())
             return response(['message' => $validate->errors()], 400);
-
-        $kamar = Jenis_Kamar::create($storeData); // Update the model name
+            
+        $kamar = Kamar::create($storeData);
+        $kamar->nomor_kamar = $request->nomor_kamar;
+        
         return response([
             'message' => 'Add kamar Success',
             'data' => $kamar
@@ -51,7 +49,7 @@ class KamarController extends Controller
 
     public function show($id)
     {
-        $kamar = Jenis_Kamar::find($id); 
+        $kamar = Kamar::with('jenis_kamar')->find($id);
 
         if (!is_null($kamar)) {
             return response([
@@ -68,7 +66,7 @@ class KamarController extends Controller
 
     public function update(Request $request, $id)
     {
-        $kamar = Jenis_Kamar::find($id); // Update the model name
+        $kamar = Kamar::find($id);
         if (is_null($kamar)) {
             return response([
                 'message' => 'Kamar Not Found',
@@ -78,23 +76,13 @@ class KamarController extends Controller
 
         $updateData = $request->all();
         $validate = Validator::make($updateData, [
-            'jenis_kamar' => 'required',
-            'tipe_ranjang' => 'required',
-            'fasilitas' => 'required',
-            'harga' => 'required',
-            'luas_kamar' => 'required',
-            'kapasitas' => 'required',
+            'id_jenis' => 'required',
         ]);
 
         if ($validate->fails())
             return response(['message' => $validate->errors()], 400);
 
-        $kamar->jenis_kamar = $updateData['jenis_kamar'];
-        $kamar->tipe_ranjang = $updateData['tipe_ranjang'];
-        $kamar->fasilitas = $updateData['fasilitas'];
-        $kamar->harga = $updateData['harga'];
-        $kamar->luas_kamar = $updateData['luas_kamar'];
-        $kamar->kapasitas = $updateData['kapasitas'];
+        $kamar->id_jenis = $updateData['id_jenis'];
 
         if ($kamar->save()) {
             return response([
@@ -111,7 +99,7 @@ class KamarController extends Controller
 
     public function destroy($id)
     {
-        $kamar = Jenis_Kamar::find($id); // Update the model name
+        $kamar = Kamar::find($id); 
 
         if (is_null($kamar)) {
             return response([

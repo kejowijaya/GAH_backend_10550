@@ -42,12 +42,12 @@ class Reservasi extends Model
         return $this->hasMany(Reservasi_Layanan::class);
     }
 
-    public function customers()
+    public function customer()
     {
         return $this->belongsTo(Customer::class, 'id_customer', 'id_customer');
     }
 
-    public function pegawais()
+    public function pegawai()
     {
         return $this->belongsTo(Pegawai::class, 'id_pegawai', 'id_pegawai');
     }

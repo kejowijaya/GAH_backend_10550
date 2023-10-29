@@ -54,7 +54,7 @@ class AuthController extends Controller
             return response(['message' => $validate->errors()], 400);
         }
     
-        if (!Auth::guard('customer')->attempt($loginData)) {
+        if (!Auth::guard('web')->attempt($loginData)) {
             return response(['message' => 'Invalid Credentials'], 401);
         }        
     
