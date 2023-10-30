@@ -56,7 +56,7 @@ Route::post('registerPegawai', 'App\Http\Controllers\Api\AuthController@register
 Route::post('login', 'App\Http\Controllers\Api\AuthController@login');
 Route::post('loginPegawai', 'App\Http\Controllers\Api\AuthController@loginPegawai');
 Route::post('logout', 'App\Http\Controllers\Api\AuthController@logout');
-Route::post('changePassword/{id}', 'App\Http\Controllers\Api\AuthController@changePassword');
+Route::post('changePassword/{email}', 'App\Http\Controllers\Api\AuthController@changePassword');
 
 Route::put('customer/{id}', 'App\Http\Controllers\Api\AuthController@update');
 

@@ -137,7 +137,6 @@ class AuthController extends Controller
             'message' => 'Customer Found',
             'data' => $customer
         ], 200);
-
     }
 
     public function registerPegawai(Request $request)
@@ -208,9 +207,9 @@ class AuthController extends Controller
 
     }
 
-    public function changePassword(Request $request, $id)
+    public function changePassword(Request $request, $email)
     {
-        $customer = Customer::find($id);
+        $customer = Customer::find($email);
         if(is_null($customer)){
             return response([
                 'message' => 'Customer Not Found',
