@@ -209,7 +209,7 @@ class AuthController extends Controller
 
     public function changePassword(Request $request, $email)
     {
-        $customer = Customer::find($email);
+        $customer = Customer::where('email', $email)->first();
         if(is_null($customer)){
             return response([
                 'message' => 'Customer Not Found',
