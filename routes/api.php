@@ -56,7 +56,7 @@ Route::post('login', 'App\Http\Controllers\Api\AuthController@login');
 Route::post('loginPegawai', 'App\Http\Controllers\Api\AuthController@loginPegawai');
 Route::post('logout', 'App\Http\Controllers\Api\AuthController@logout');
 Route::post('changePassword/{id}', 'App\Http\Controllers\Api\AuthController@changePassword');
-Route::get('customer/{id}', 'App\Http\Controllers\Api\AuthController@get');
+Route::get('customer/{id}', 'App\Http\Controllers\Api\AuthController@show');
 
 Route::get('riwayatTransaksi/{id}', 'App\Http\Controllers\Api\ReservasiController@getRiwayatTransaksi');
 Route::get('reservasi/{id}', 'App\Http\Controllers\Api\ReservasiController@getDetailTransaksi');

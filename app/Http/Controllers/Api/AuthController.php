@@ -134,7 +134,7 @@ class AuthController extends Controller
         }
         return response([
             'message' => 'Customer Found',
-            'customer' => $customer
+            'data' => $customer
         ], 200);
 
     }
