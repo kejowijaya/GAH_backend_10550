@@ -90,7 +90,7 @@ class AuthController extends Controller
             'no_identitas' => 'required',
             'nama' => 'required|string',
             'nomor_telepon' => 'required|string|min:10|max:13',
-            'email' => 'requireed|string|email|unique:customers',
+            'email' => 'required|string|email',
             'password' => 'required',
             'alamat' => 'required|string',
             'jenis_tamu' => 'required|string',
@@ -99,6 +99,8 @@ class AuthController extends Controller
 
         if($validate->fails())
             return response(['message' => $validate->errors()], 400);
+
+        $updateData['password'] = bcrypt($request->password);
 
         $customer->no_identitas = $updateData['no_identitas'];
         $customer->nama = $updateData['nama'];
