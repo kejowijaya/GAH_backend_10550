@@ -208,10 +208,10 @@ class AuthController extends Controller
 
     public function changePassword(Request $request, $id)
     {
-        $pegawai = Pegawai::find($id);
-        if(is_null($pegawai)){
+        $customer = Customer::find($id);
+        if(is_null($customer)){
             return response([
-                'message' => 'Pegawai Not Found',
+                'message' => 'Customer Not Found',
                 'data' => null
             ], 404);
         }
@@ -225,17 +225,17 @@ class AuthController extends Controller
             return response(['message' => $validate->errors()], 400);
             
         $updateData['password'] = bcrypt($request->password);
-        $pegawai->password = $updateData['password'];
+        $customer->password = $updateData['password'];
 
-        if($pegawai->save()){
+        if($customer->save()){
             return response([
-                'message' => 'Update Pegawai Success',
-                'data' => $pegawai
+                'message' => 'Update Customer Success',
+                'data' => $customer
             ], 200);
         }
 
         return response([
-            'message' => 'Update Pegawai Failed',
+            'message' => 'Update Customer Failed',
             'data' => null
         ], 400);
     }
