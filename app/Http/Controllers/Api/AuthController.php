@@ -122,7 +122,6 @@ class AuthController extends Controller
         ], 400);
     }
 
-    // show by id
     public function show($id)
     {
         $customer = Customer::find($id);
@@ -189,7 +188,23 @@ class AuthController extends Controller
             'pegawai' => $pegawai,
             'token' => $token,
         ]);
-    }    
+    }   
+    
+    public function showPegawai($id)
+    {
+        $pegawai = Pegawai::find($id);
+        if(is_null($pegawai)){
+            return response([
+                'message' => 'Pegawai Not Found',
+                'data' => null
+            ], 404);
+        }
+        return response([
+            'message' => 'Pegawai Found',
+            'data' => $pegawai
+        ], 200);
+
+    }
 
     public function changePassword(Request $request, $id)
     {
