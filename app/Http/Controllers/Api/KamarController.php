@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Validator;
-use App\Models\Kamar; 
+use App\Models\Kamar;
+use App\Models\Jenis_Kamar;
 
 class KamarController extends Controller
 {
@@ -120,4 +121,5 @@ class KamarController extends Controller
             'data' => null
         ], 400);
     }
+
 }

@@ -26,6 +26,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function(){
     Route::post('kamar', KamarController::class . '@store');
     Route::put('kamar/{id}', KamarController::class . '@update');
     Route::delete('kamar/{id}', KamarController::class . '@destroy');
+    
 });
 
 Route::middleware(['auth:sanctum', 'role:sm'])->group(function () {

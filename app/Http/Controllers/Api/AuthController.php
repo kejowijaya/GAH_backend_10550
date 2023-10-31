@@ -169,7 +169,7 @@ class AuthController extends Controller
         $loginData = $request->all();
     
         $validate = Validator::make($loginData, [
-            'username' => 'required|string',
+            'email' => 'required|string|unique:pegawai',
             'password' => 'required',
         ]);
     
@@ -181,7 +181,7 @@ class AuthController extends Controller
             return response(['message' => 'Invalid Credentials'], 401);
         }
     
-        $pegawai = Pegawai::where('username', $request->username)->first();
+        $pegawai = Pegawai::where('email', $request->email)->first();
         $token = $pegawai->createToken('Authentication Token')->plainTextToken;
     
         return response([
