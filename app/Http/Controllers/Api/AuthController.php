@@ -169,7 +169,7 @@ class AuthController extends Controller
         $loginData = $request->all();
     
         $validate = Validator::make($loginData, [
-            'email' => 'required|string|unique:pegawai',
+            'email' => 'required|string',
             'password' => 'required',
         ]);
     
