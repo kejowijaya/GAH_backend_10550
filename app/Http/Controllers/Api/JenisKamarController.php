@@ -8,7 +8,7 @@ use Illuminate\Validation\Rule;
 use Validator;
 use App\Models\Jenis_Kamar;
 
-class KamarController extends Controller
+class JenisKamarController extends Controller
 {
     public function show($id)
     {
