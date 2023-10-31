@@ -24,7 +24,6 @@ class AuthController extends Controller
             'email' => 'required|string|email|unique:customer',
             'password' => 'required',
             'alamat' => 'required|string',
-            'jenis_tamu' => 'required|string',
         ]);
 
         if($validate->fails())
@@ -32,6 +31,7 @@ class AuthController extends Controller
                
         $registrationData['password'] = bcrypt($request->password);
 
+        $registrationData['jenis_tamu'] = 'customer';
         $customer = Customer::create($registrationData);
 
         event(new Registered($customer));
