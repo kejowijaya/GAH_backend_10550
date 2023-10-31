@@ -84,6 +84,7 @@ class KamarController extends Controller
             return response(['message' => $validate->errors()], 400);
 
         $kamar->id_jenis = $updateData['id_jenis'];
+        $kamar->nomor_kamar = $updateData['nomor_kamar'];
 
         if ($kamar->save()) {
             return response([
