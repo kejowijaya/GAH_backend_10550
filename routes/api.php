@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\FasilitasController;
 use App\Http\Controllers\Api\KamarController;
 use App\Http\Controllers\Api\SeasonController;
 use App\Http\Controllers\Api\TarifController;
+use App\Http\Controllers\Api\JenisKamarController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +27,6 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function(){
     Route::post('kamar', KamarController::class . '@store');
     Route::put('kamar/{id}', KamarController::class . '@update');
     Route::delete('kamar/{id}', KamarController::class . '@destroy');
-    
 });
 
 Route::middleware(['auth:sanctum', 'role:sm'])->group(function () {
@@ -51,6 +51,7 @@ Route::get('tarif', [TarifController::class, 'index']);
 Route::get('tarif/{id}', [TarifController::class, 'show']);
 Route::get('kamar', KamarController::class . '@index');
 Route::get('fasilitas/{id}', FasilitasController::class . '@show'); 
+Route::get('jenis_kamar', JenisKamarController::class . '@show');
 
 Route::post('register', 'App\Http\Controllers\Api\AuthController@register');
 Route::post('registerPegawai', 'App\Http\Controllers\Api\AuthController@registerPegawai');
