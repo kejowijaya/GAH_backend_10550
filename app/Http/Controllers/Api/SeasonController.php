@@ -32,7 +32,16 @@ class SeasonController extends Controller
         $storeData = $request->all();
         $validate = Validator::make($storeData, [
             'nama_season' => 'required',
-            'tanggal_mulai' => 'required|date',
+            'tanggal_mulai' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) {
+                    $twoMonthsFromNow = now()->addMonths(2);
+                    if ($value < $twoMonthsFromNow) {
+                        $fail("$attribute harus lebih dari 2 bulan dari tanggal sekarang.");
+                    }
+                },
+            ],
             'tanggal_selesai' => 'required|date|after:tanggal_mulai',
             'jenis_season' => 'required',
         ]);
@@ -77,8 +86,17 @@ class SeasonController extends Controller
         $updateData = $request->all();
         $validate = Validator::make($updateData, [
             'nama_season' => 'required',
-            'tanggal_mulai' => 'required',
-            'tanggal_selesai' => 'required',
+            'tanggal_mulai' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) {
+                    $twoMonthsFromNow = now()->addMonths(2);
+                    if ($value < $twoMonthsFromNow) {
+                        $fail("$attribute harus lebih dari 2 bulan dari tanggal sekarang.");
+                    }
+                },
+            ],
+            'tanggal_selesai' => 'required|date|after:tanggal_mulai',
             'jenis_season' => 'required',
         ]);
 

@@ -51,7 +51,8 @@ Route::get('tarif', [TarifController::class, 'index']);
 Route::get('tarif/{id}', [TarifController::class, 'show']);
 Route::get('kamar', KamarController::class . '@index');
 Route::get('fasilitas/{id}', FasilitasController::class . '@show'); 
-Route::get('jenis_kamar', JenisKamarController::class . '@show');
+Route::get('jenis_kamar', JenisKamarController::class . '@index');
+Route::get('jenis_kamar/{id}', JenisKamarController::class . '@show');
 
 Route::post('register', 'App\Http\Controllers\Api\AuthController@register');
 Route::post('registerPegawai', 'App\Http\Controllers\Api\AuthController@registerPegawai');

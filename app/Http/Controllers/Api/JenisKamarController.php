@@ -27,5 +27,22 @@ class JenisKamarController extends Controller
         ], 404);
     }
 
+    public function index()
+    {
+        $jenis_kamar = Jenis_Kamar::all();
+
+        if(count($jenis_kamar) > 0){
+            return response([
+                'message' => 'Retrieve All Success',
+                'data' => $jenis_kamar
+            ], 200);
+        }
+
+        return response([
+            'message' => 'Empty',
+            'data' => null
+        ], 400);
+    }
+
 
 }
