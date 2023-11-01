@@ -75,7 +75,7 @@ class FasilitasController extends Controller
 
         $updateData = $request->all();
         $validate = Validator::make($updateData, [
-            'nama_fasilitas' => 'required|unique:fasilitas',
+            'nama_fasilitas' => 'required|',
             'harga' => 'required',
             'satuan' => 'required',
         ]);
