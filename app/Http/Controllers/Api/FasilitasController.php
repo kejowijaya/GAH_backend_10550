@@ -31,7 +31,7 @@ class FasilitasController extends Controller
     {
         $storeData = $request->all();
         $validate = Validator::make($storeData, [
-            'nama_fasilitas' => 'required',
+            'nama_fasilitas' => 'required|unique:fasilitas',
             'harga' => 'required',
             'satuan' => 'required',
         ]);
@@ -75,7 +75,7 @@ class FasilitasController extends Controller
 
         $updateData = $request->all();
         $validate = Validator::make($updateData, [
-            'nama_fasilitas' => 'required',
+            'nama_fasilitas' => 'required|unique:fasilitas',
             'harga' => 'required',
             'satuan' => 'required',
         ]);

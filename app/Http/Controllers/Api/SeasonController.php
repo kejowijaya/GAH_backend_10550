@@ -31,7 +31,7 @@ class SeasonController extends Controller
     {
         $storeData = $request->all();
         $validate = Validator::make($storeData, [
-            'nama_season' => 'required',
+            'nama_season' => 'required|unique:season',
             'tanggal_mulai' => [
                 'required',
                 'date',
@@ -85,7 +85,7 @@ class SeasonController extends Controller
 
         $updateData = $request->all();
         $validate = Validator::make($updateData, [
-            'nama_season' => 'required',
+            'nama_season' => 'required|unique:season',
             'tanggal_mulai' => [
                 'required',
                 'date',
