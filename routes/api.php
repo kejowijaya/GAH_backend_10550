@@ -27,6 +27,10 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function(){
     Route::post('kamar', KamarController::class . '@store');
     Route::put('kamar/{id}', KamarController::class . '@update');
     Route::delete('kamar/{id}', KamarController::class . '@destroy');
+
+    Route::post('jenisKamar', JenisKamarController::class . '@store');
+    Route::put('jenisKamar/{id}', JenisKamarController::class . '@update');
+    Route::delete('jenisKamar/{id}', JenisKamarController::class . '@destroy');
 });
 
 Route::middleware(['auth:sanctum', 'role:sm'])->group(function () {
@@ -50,6 +54,8 @@ Route::get('kamar/{id}', KamarController::class . '@show');
 Route::get('tarif', [TarifController::class, 'index']);
 Route::get('tarif/{id}', [TarifController::class, 'show']);
 Route::get('kamar', KamarController::class . '@index');
+Route::get('jenisKamar', JenisKamarController::class . '@index');
+Route::get('jenisKamar/{id}', JenisKamarController::class . '@show');
 Route::get('fasilitas/{id}', FasilitasController::class . '@show'); 
 Route::get('jenis_kamar', JenisKamarController::class . '@index');
 Route::get('jenis_kamar/{id}', JenisKamarController::class . '@show');
