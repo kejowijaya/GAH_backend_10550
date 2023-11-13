@@ -18,13 +18,15 @@ class Reservasi extends Model
         'id_customer',
         'id_booking',
         'tanggal_booking',
-        'tanggal_checkin',
-        'tanggal_checkout',
-        'jumlah_dewasa',
-        'jumlah_anak',
+        'tanggal_check_in',
+        'tanggal_check_out',
+        'dewasa',
+        'anak',
         'total_harga',
         'permintaan_khusus',
         'status',
+        'nomor_rek',
+        'tanggal_bayar'
     ];
 
     public function invoices()
@@ -32,14 +34,14 @@ class Reservasi extends Model
         return $this->hasMany(Invoice::class);
     }
 
-    public function reservasikamars()
+    public function reservasi_kamar()
     {
-        return $this->hasMany(Reservasi_Kamar::class);
+        return $this->hasMany(Reservasi_Kamar::class, 'id_reservasi', 'id_reservasi');
     }
 
-    public function reservasilayanans()
+    public function reservasi_layanan()
     {
-        return $this->hasMany(Reservasi_Layanan::class);
+        return $this->hasMany(Reservasi_Layanan::class, 'id_reservasi', 'id_reservasi');
     }
 
     public function customer()

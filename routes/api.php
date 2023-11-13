@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\KamarController;
 use App\Http\Controllers\Api\SeasonController;
 use App\Http\Controllers\Api\TarifController;
 use App\Http\Controllers\Api\JenisKamarController;
+use App\Http\Controllers\Api\ReservasiController;
+use App\Http\Controllers\Api\ReservasiLayanan;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +49,11 @@ Route::middleware(['auth:sanctum', 'role:sm'])->group(function () {
     Route::delete('fasilitas/{id}', FasilitasController::class . '@destroy');
 });
 
+Route::get('hitungKamar', JenisKamarController::class . '@countKamar');
+Route::get('getResumeReservasi/{id}', ReservasiController::class . '@getResumeReservasi');
+Route::post('tambahLayanan', ReservasiLayanan::class . '@tambahLayanan');
+Route::post('tambahReservasi', ReservasiController::class . '@addReservasi');
+
 Route::get('season', SeasonController::class . '@index');
 Route::get('season/{id}', SeasonController::class . '@show');
 Route::get('fasilitas', FasilitasController::class . '@index');
@@ -74,5 +81,7 @@ Route::get('pegawai/{id}', 'App\Http\Controllers\Api\AuthController@showPegawai'
 
 Route::get('riwayatTransaksi/{id}', 'App\Http\Controllers\Api\ReservasiController@getRiwayatTransaksi');
 Route::get('reservasi/{id}', 'App\Http\Controllers\Api\ReservasiController@getDetailTransaksi');
+Route::post('kamarTersedia', 'App\Http\Controllers\Api\ReservasiController@ketersediaanKamar');
+Route::post('bayar/{id}', 'App\Http\Controllers\Api\ReservasiController@bayarReservasi');
 
 

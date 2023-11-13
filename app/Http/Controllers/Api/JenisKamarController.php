@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Validator;
 use App\Models\Jenis_Kamar;
+use Illuminate\Support\Facades\DB;
 
 class JenisKamarController extends Controller
 {
@@ -79,7 +80,7 @@ class JenisKamarController extends Controller
 
         $updateData = $request->all();
         $validate = Validator::make($updateData, [
-            'jenis_kamar' => ['required', Rule::unique('jenis_kamar')->ignore($jenis_kamar)],
+            'jenis_kamar' => 'required',
             'harga' => 'required',
             'fasilitas' => 'required',
             'tipe_ranjang' => 'required',
@@ -133,6 +134,20 @@ class JenisKamarController extends Controller
         ], 400);
     }
 
+
+    
+    public function countKamar(){
+        $jenisKamar = Jenis_Kamar::select('jenis_kamar.jenis_kamar', DB::raw('count(kamar.nomor_kamar) as jumlah_kamar'), 'jenis_kamar.harga')
+        ->leftJoin('kamar', 'jenis_kamar.id_jenis', '=', 'kamar.id_jenis')
+        ->groupBy('jenis_kamar.jenis_kamar', 'jenis_kamar.harga')
+        ->get();
+
+        return response()->json([
+            'status' => 'Success',
+            'message' => 'Get count kamar success',
+            'data' => $jenisKamar
+        ]);
+    }
 
 
 

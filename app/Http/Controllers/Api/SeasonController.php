@@ -85,7 +85,6 @@ class SeasonController extends Controller
 
         $updateData = $request->all();
         $validate = Validator::make($updateData, [
-            'nama_season' => 'required|unique:season',
             'tanggal_mulai' => [
                 'required',
                 'date',

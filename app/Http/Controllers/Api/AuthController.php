@@ -31,7 +31,7 @@ class AuthController extends Controller
                
         $registrationData['password'] = bcrypt($request->password);
 
-        $registrationData['jenis_tamu'] = 'customer';
+        $registrationData['jenis_tamu'] = 'personal';
         $customer = Customer::create($registrationData);
 
         event(new Registered($customer));

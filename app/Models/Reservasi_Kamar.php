@@ -9,6 +9,10 @@ class Reservasi_Kamar extends Model
 {
     use HasFactory;
 
+    protected $table = 'reservasi_kamar';
+    protected $primaryKey = 'id_reservasi_kamar';
+    public $timestamps = false;
+
     protected $fillable = [
         'id_reservasi',
         'id_jenis',

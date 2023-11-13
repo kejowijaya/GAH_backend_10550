@@ -9,6 +9,10 @@ class Reservasi_Layanan extends Model
 {
     use HasFactory;
 
+    protected $table = 'reservasi_layanan';
+    protected $primaryKey = 'id_reservasi_layanan';
+    public $timestamps = false;
+
     protected $fillable = [
         'id_reservasi',
         'id_fasilitas',
