@@ -27,7 +27,7 @@ class ReservasiLayanan extends Controller
             $hargaFasilitas = Fasilitas::find($fasilitas['id_fasilitas'])->harga;
         
             $reservasi_layanan = new Reservasi_Layanan();
-            $reservasi_layanan->id_reservasi = $reservasi->id_reservasi;
+            $reservasi_layanan->id_reservasi = $request->id_reservasi;
             $reservasi_layanan->id_fasilitas = $fasilitas['id_fasilitas'];
             $reservasi_layanan->jumlah = $fasilitas['jumlah'];
         
