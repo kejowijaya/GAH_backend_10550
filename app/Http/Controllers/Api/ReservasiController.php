@@ -155,6 +155,7 @@ class ReservasiController extends Controller
                 return response()->json(['message' => 'Uang kurang'], 400);
             }else{
                 $reservasi->status = "Sudah DP";
+                $reservasi->tanggal_bayar = now();
                 $reservasi->save();
                 return response()->json([
                     'status' => 'success',
@@ -167,6 +168,7 @@ class ReservasiController extends Controller
                 return response()->json(['message' => 'Uang kurang'], 400);
             }else{
                 $reservasi->status = "Sudah DP";
+                $reservasi->tanggal_bayar = now();
                 $reservasi->save();
                 return response()->json([
                     'status' => 'success',
