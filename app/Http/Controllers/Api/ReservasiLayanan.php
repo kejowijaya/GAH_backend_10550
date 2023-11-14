@@ -21,8 +21,6 @@ class ReservasiLayanan extends Controller
         if($validate->fails())
             return response(['message' => $validate->errors()], 400);
 
-        $reservasi_layanan = Reservasi_Layanan::create($storeData);
-
         $totalHarga = 0;
 
         foreach ($storeData['fasilitas'] as $fasilitas) {
@@ -43,7 +41,6 @@ class ReservasiLayanan extends Controller
         
         return response([
             'message' => 'Add Reservasi Layanan Success',
-            'data' => $reservasi_layanan
         ], 200);
     }
 }
