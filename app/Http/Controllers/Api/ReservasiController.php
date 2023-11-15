@@ -245,21 +245,22 @@ class ReservasiController extends Controller
         }
 
         if($now >= $sevenDaysBeforeCheckIn){
-            return response()->json([
+            $reservasi->status = "Batal";
+            $reservasi->save();
+            return response()->json([    
                 'status' => 'success',
                 'message' => 'Batal reservasi success, uang hangus',
                 'data' => $sevenDaysBeforeCheckIn
             ]);
         }else{
+            $reservasi->status = "Batal";
+            $reservasi->save();
             return response()->json([
                 'status' => 'success',
                 'message' => 'Batal reservasi success, uang telah dikembalikan',
                 'data' => $sevenDaysBeforeCheckIn
             ]);
         }
-
-        $reservasi->status = "Batal";
-        $reservasi->save();
 
     }
 
