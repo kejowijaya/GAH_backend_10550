@@ -44,6 +44,23 @@ class ReservasiController extends Controller
         ]);
     }
 
+    public function getTransaksiGrup()
+    {
+        $reservasiGrup = Reservasi::whereHas('customer', function ($query) {
+            $query->where('jenis_tamu', 'Grup');
+        })->get();
+
+        if ($reservasiGrup->isEmpty()) {
+            return response()->json(['message' => 'No reservations found for this customer'], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Get riwayat transaksi success',
+            'data' => $reservasiGrup
+        ]);
+    }
+
     public function addReservasi(Request $request){
         $id_booking = 'P' . date('dmy') . '-' . rand(1, 999);
         $status = "Belum DP";
