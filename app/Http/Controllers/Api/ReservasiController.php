@@ -188,7 +188,7 @@ class ReservasiController extends Controller
             return response()->json(['message' => 'Reservation not found'], 404);
         }
 
-        if(now > $sevenDaysBeforeCheckIn){
+        if($now > $sevenDaysBeforeCheckIn){
             return response()->json([
                 'status' => 'success',
                 'message' => 'Batal reservasi success, uang telah dikembalikan',
