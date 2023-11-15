@@ -82,6 +82,8 @@ Route::get('pegawai/{id}', 'App\Http\Controllers\Api\AuthController@showPegawai'
 
 Route::get('riwayatTransaksi/{id}', 'App\Http\Controllers\Api\ReservasiController@getRiwayatTransaksi');
 Route::get('reservasi/{id}', 'App\Http\Controllers\Api\ReservasiController@getDetailTransaksi');
+Route::get('reservasiGrup', 'App\Http\Controllers\Api\ReservasiController@getReservasiGrup');
+
 Route::post('kamarTersedia', 'App\Http\Controllers\Api\ReservasiController@ketersediaanKamar');
 Route::post('bayar/{id}', 'App\Http\Controllers\Api\ReservasiController@bayarReservasi');
 Route::post('batal/{id}', 'App\Http\Controllers\Api\ReservasiController@batalPesan');

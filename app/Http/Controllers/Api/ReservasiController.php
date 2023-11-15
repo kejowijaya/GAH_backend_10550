@@ -44,7 +44,7 @@ class ReservasiController extends Controller
         ]);
     }
 
-    public function getTransaksiGrup()
+    public function getReservasiGrup()
     {
         $reservasiGrup = Reservasi::whereHas('customer', function ($query) {
             $query->where('jenis_tamu', 'Grup');
