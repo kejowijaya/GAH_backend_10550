@@ -45,7 +45,63 @@ class ReservasiController extends Controller
     }
 
     public function addReservasi(Request $request){
-        $id_booking = 'P' . date('dmy') . '-' . rand(100, 999);
+        $id_booking = 'P' . date('dmy') . '-' . rand(1, 999);
+        $status = "Belum DP";
+
+        $tanggal_booking = date('Y-m-d');
+
+        $storeData = $request->all();
+        $storeData['id_booking'] = $id_booking;
+        $storeData['status'] = $status;
+        $storeData['total_harga'] = 0;
+        $storeData['tanggal_booking'] = $tanggal_booking;
+
+        $validate = Validator::make($storeData, [
+            'id_customer' => 'required',
+            'tanggal_check_in' => 'required|before:tanggal_check_out',
+            'tanggal_check_out' => 'required|after:tanggal_check_in',
+            'dewasa' => 'required',
+            'anak' => 'required',
+            'nomor_rek' => 'required',
+            'jenis_kamar' => 'required|array',
+        ]);
+
+        if ($validate->fails())
+            return response(['message' => $validate->errors()], 400);
+
+        $reservasi = Reservasi::create($storeData);
+
+        $totalHarga = 0;
+
+        foreach ($storeData['jenis_kamar'] as $jenisKamar) {
+            $hargaKamar = Jenis_Kamar::find($jenisKamar['id_jenis'])->harga;
+        
+            $reservasi_kamar = new Reservasi_Kamar();
+            $reservasi_kamar->id_reservasi = $reservasi->id_reservasi;
+            $reservasi_kamar->id_jenis = $jenisKamar['id_jenis'];
+            $reservasi_kamar->jumlah = $jenisKamar['jumlah'];
+        
+            $subtotalItem = $jenisKamar['jumlah'] * $hargaKamar;
+        
+            $totalHarga += $subtotalItem;
+        
+            $reservasi_kamar->subtotal = $subtotalItem;
+            $reservasi_kamar->save();
+        }
+        
+        $reservasi->total_harga = $totalHarga;
+        $reservasi->save();
+
+        return response([
+            'status' => 'Success',
+            'message' => 'Add reservasi success',
+            'data' => $reservasi
+        ], 200);
+
+    }
+
+    public function addReservasiGrup(Request $request){
+        $id_booking = 'G' . date('dmy') . '-' . rand(1, 999);
         $status = "Belum DP";
 
         $tanggal_booking = date('Y-m-d');
@@ -188,7 +244,7 @@ class ReservasiController extends Controller
             return response()->json(['message' => 'Reservation not found'], 404);
         }
 
-        if($now <= $sevenDaysBeforeCheckIn){
+        if($now >= $sevenDaysBeforeCheckIn){
             return response()->json([
                 'status' => 'success',
                 'message' => 'Batal reservasi success, uang hangus',
