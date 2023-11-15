@@ -46,7 +46,7 @@ class ReservasiController extends Controller
 
     public function getReservasiGrup()
     {
-        $reservasiGrup = Reservasi::whereHas('customer', function ($query) {
+        $reservasiGrup = Reservasi::with('customer', 'pegawai')->whereHas('customer', function ($query) {
             $query->where('jenis_tamu', 'Grup');
         })->get();
 
