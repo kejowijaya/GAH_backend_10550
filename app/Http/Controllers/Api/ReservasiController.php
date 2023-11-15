@@ -243,6 +243,9 @@ class ReservasiController extends Controller
         })->orWhere(function ($query) use ($tanggal_check_in, $tanggal_check_out) {
             $query->where('tanggal_check_in', '>=', $tanggal_check_in)
                 ->where('tanggal_check_out', '<=', $tanggal_check_out);
+        })->where(function ($query) {
+            $query->where('status', 'batal')
+                ->orWhere('status', 'lunas');
         })->with('reservasi_kamar')->get();
 
         if ($jmlKamarSudahDipakai !== null) {
