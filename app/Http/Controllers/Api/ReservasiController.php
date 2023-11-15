@@ -188,7 +188,12 @@ class ReservasiController extends Controller
             return response()->json(['message' => 'Reservation not found'], 404);
         }
 
-        if($now > $sevenDaysBeforeCheckIn){
+        if($now < $sevenDaysBeforeCheckIn){
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Batal reservasi success, uang hangus',
+            ]);
+        }else{
             return response()->json([
                 'status' => 'success',
                 'message' => 'Batal reservasi success, uang telah dikembalikan',
@@ -198,11 +203,6 @@ class ReservasiController extends Controller
         $reservasi->status = "Batal";
         $reservasi->save();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Batal reservasi success',
-            'data' => $reservasi
-        ]);
     }
 
     public function ketersediaanKamar(Request $request){

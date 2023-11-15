@@ -139,6 +139,23 @@ class AuthController extends Controller
         ], 200);
     }
 
+    public function showByJenisTamu()
+    {
+        $customers = Customer::where('jenis_tamu', 'Grup')->get();
+
+        if ($customers->isEmpty()) {
+            return response([
+                'message' => 'No customers found with jenis_tamu',
+                'data' => null
+            ], 404);
+        }
+
+        return response([
+            'message' => 'Customers Group Found',
+            'data' => $customers
+        ], 200);
+    }
+
     public function registerPegawai(Request $request)
     {
         $registrationData = $request->all();
