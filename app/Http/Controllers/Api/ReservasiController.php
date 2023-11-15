@@ -205,7 +205,7 @@ class ReservasiController extends Controller
         }
 
         return response()->json([
-            'status' => 'success',
+            'status' => 'success', 
             'message' => 'Get reservation success',
             'data' => $reservasi
         ]);
