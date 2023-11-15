@@ -139,13 +139,13 @@ class AuthController extends Controller
         ], 200);
     }
 
-    public function showByJenisTamu()
+    public function showGrup()
     {
         $customers = Customer::where('jenis_tamu', 'Grup')->get();
 
         if ($customers->isEmpty()) {
             return response([
-                'message' => 'No customers found with jenis_tamu',
+                'message' => 'No group customers found',
                 'data' => null
             ], 404);
         }

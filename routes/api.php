@@ -77,6 +77,7 @@ Route::post('changePassword/{email}', 'App\Http\Controllers\Api\AuthController@c
 Route::put('customer/{id}', 'App\Http\Controllers\Api\AuthController@update');
 
 Route::get('customer/{id}', 'App\Http\Controllers\Api\AuthController@show');
+Route::get('customerGrup', 'App\Http\Controllers\Api\AuthController@showGrup');
 Route::get('pegawai/{id}', 'App\Http\Controllers\Api\AuthController@showPegawai');
 
 Route::get('riwayatTransaksi/{id}', 'App\Http\Controllers\Api\ReservasiController@getRiwayatTransaksi');
