@@ -181,9 +181,18 @@ class ReservasiController extends Controller
 
     public function batalPesan($id){
         $reservasi = Reservasi::find($id);
+        $sevenDaysBeforeCheckIn = date('Y-m-d', strtotime($reservasi->tanggal_check_in . ' - 7 days'));
+        $now = now()->toDateString();
 
         if (is_null($reservasi)) {
             return response()->json(['message' => 'Reservation not found'], 404);
+        }
+
+        if(now > $sevenDaysBeforeCheckIn){
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Batal reservasi success, uang telah dikembalikan',
+            ]);
         }
 
         $reservasi->status = "Batal";
