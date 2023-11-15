@@ -83,5 +83,5 @@ Route::get('riwayatTransaksi/{id}', 'App\Http\Controllers\Api\ReservasiControlle
 Route::get('reservasi/{id}', 'App\Http\Controllers\Api\ReservasiController@getDetailTransaksi');
 Route::post('kamarTersedia', 'App\Http\Controllers\Api\ReservasiController@ketersediaanKamar');
 Route::post('bayar/{id}', 'App\Http\Controllers\Api\ReservasiController@bayarReservasi');
-
+Route::post('batal/{id}', 'App\Http\Controllers\Api\ReservasiController@batalPesan');
 
