@@ -88,3 +88,9 @@ Route::post('kamarTersedia', 'App\Http\Controllers\Api\ReservasiController@keter
 Route::post('bayar/{id}', 'App\Http\Controllers\Api\ReservasiController@bayarReservasi');
 Route::post('batal/{id}', 'App\Http\Controllers\Api\ReservasiController@batalPesan');
 
+Route::post('cekIn', 'App\Http\Controllers\Api\ReservasiController@checkIn');
+Route::post('cekOut', 'App\Http\Controllers\Api\ReservasiController@checkOut');
+Route::get('laporan1', 'App\Http\Controllers\Api\ReservasiController@getLaporanCustomerBaru');
+Route::get('laporan2', 'App\Http\Controllers\Api\ReservasiController@getLaporanPendapatanBulan');
+Route::get('laporan3', 'App\Http\Controllers\Api\ReservasiController@getLaporanJumlahTamu');
+Route::get('laporan4', 'App\Http\Controllers\Api\ReservasiController@getLaporanReservasiTerbanyak');

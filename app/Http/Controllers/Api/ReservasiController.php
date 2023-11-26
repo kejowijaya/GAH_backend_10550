@@ -14,6 +14,20 @@ use Illuminate\Support\Facades\DB;
 
 class ReservasiController extends Controller
 {
+    public function getAllReservasi(){
+        $reservasi = Reservasi::with('customer', 'pegawai')->get();
+
+        if ($reservasi->isEmpty()) {
+            return response()->json(['message' => 'No reservations found'], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Get all reservations success',
+            'data' => $reservasi
+        ]);
+    }
+
     public function getDetailTransaksi($id)
     {
         $reservasi = Reservasi::with('customer', 'pegawai')->where('id_reservasi', $id)->first();
@@ -171,28 +185,6 @@ class ReservasiController extends Controller
             'data' => $reservasi
         ], 200);
 
-    }
-
-    public function addReservasiKamar($id){
-        $storeData = $request->all();
-
-        $validate = Validator::make($storeData, [
-            'id_reservasi' => 'required',
-            'id_jenis' => 'required',
-            'jumlah' => 'required',
-            'subtotal' => 'required',
-        ]);
-
-        if ($validate->fails())
-            return response(['message' => $validate->errors()], 400);
-
-        $reservasi_kamar = Reservasi_Kamar::create($storeData);
-
-        return response([
-            'status' => 'Success',
-            'message' => 'Add reservasi kamar success',
-            'data' => $reservasi_kamar
-        ], 200);
     }
 
     public function getResumeReservasi($id){
@@ -358,5 +350,140 @@ class ReservasiController extends Controller
             return response()->json(['status' => 'E', 'message' => 'Terjadi kesalahan dalam pengambilan data'], 500);
         }
     }
+
+    public function checkIn(Request $request){
+        $id_reservasi = $request->id_reservasi;
+        $reservasi = Reservasi::find($id_reservasi);
+
+        if (is_null($reservasi)) {
+            return response()->json(['message' => 'Reservation not found'], 404);
+        }
+
+        $reservasi->tanggal_check_in = now();
+        $reservasi->status = "Check In";
+        $reservasi->deposit = 300000;
+        $reservasi->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Check in success',
+            'data' => $reservasi
+        ]);
+    }
+
+    public function checkOut(Request $request){
+        $id_reservasi = $request->id_reservasi;
+        $reservasi = Reservasi::find($id_reservasi);
+
+        if (is_null($reservasi)) {
+            return response()->json(['message' => 'Reservation not found'], 404);
+        }
+
+        $reservasi->tanggal_check_out = now();
+        $reservasi->id_fo = $request->id_fo;
+        $reservasi->status = "Selesai";
+        $reservasi->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Check out success',
+            'data' => $reservasi
+        ]);
+    }
+
+    public function pelunasan(Request $request){
+        $id_reservasi = $request->id_reservasi;
+        $reservasi = Reservasi::find($id_reservasi);
+
+        if (is_null($reservasi)) {
+            return response()->json(['message' => 'Reservation not found'], 404);
+        }
+
+        $reservasi->status = "Selesai";
+        //hitung total harga di invoice
+
+        $reservasi->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Pelunasan success',
+            'data' => $reservasi
+        ]);
+    }
+
+    public function getLaporanCustomerBaru(){
+        $customerBaru = Reservasi::select(DB::raw('count(customer.id_customer) as jumlahCustomer'), DB::raw("DATE_FORMAT(reservasi.tanggal_check_out, '%M') as bulan"))
+        ->join('customer', 'reservasi.id_customer', '=', 'customer.id_customer')
+        ->groupBy('bulan')
+        ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Get laporan customer baru success',
+            'data' => $customerBaru
+        ]);
+    }
+
+    public function getLaporanPendapatanBulan(){
+        $totalPendapatan = Reservasi::select(
+            DB::raw("DATE_FORMAT(reservasi.tanggal_check_out, '%M') as bulan"),
+            DB::raw('SUM(CASE WHEN customer.jenis_tamu = "personal" THEN reservasi.total_harga ELSE 0 END) as personal'),
+            DB::raw('SUM(CASE WHEN customer.jenis_tamu = "grup" THEN reservasi.total_harga ELSE 0 END) as grup'),
+            DB::raw('SUM(reservasi.total_harga) as total')
+        )
+        ->join('customer', 'reservasi.id_customer', '=', 'customer.id_customer')
+        ->groupBy('bulan')
+        ->get();
+
+    
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Get total pendapatan per bulan success',
+            'data' => $totalPendapatan
+        ]);
+    }
+
+    public function getLaporanJumlahTamu(){
+        $jumlahTamu = Reservasi::select(
+            'jenis_kamar.jenis_kamar',
+            DB::raw('SUM(CASE WHEN customer.jenis_tamu = "personal" THEN reservasi.dewasa + reservasi.anak ELSE 0 END) as personal'),
+            DB::raw('SUM(CASE WHEN customer.jenis_tamu = "grup" THEN reservasi.dewasa + reservasi.anak ELSE 0 END) as grup'),
+            DB::raw('SUM(reservasi.dewasa + reservasi.anak) as total')
+        )
+        ->join('reservasi_kamar', 'reservasi.id_reservasi', '=', 'reservasi_kamar.id_reservasi')
+        ->join('jenis_kamar', 'reservasi_kamar.id_jenis', '=', 'jenis_kamar.id_jenis')
+        ->join('customer', 'reservasi.id_customer', '=', 'customer.id_customer')
+        ->groupBy('jenis_kamar.jenis_kamar')
+        ->get();
+    
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Get total jumlah tamu per jenis kamar success',
+            'data' => $jumlahTamu
+        ]);
+    }
+    
+
+    public function getLaporanReservasiTerbanyak(){
+        $customerTerbanyak = Reservasi::select(
+            'customer.nama',
+            DB::raw('count(reservasi.id_customer) as jumlah_reservasi'),
+            DB::raw('SUM(reservasi.total_harga) as total_pembayaran'),
+        )
+        ->join('customer', 'reservasi.id_customer', '=', 'customer.id_customer')
+        ->groupBy('customer.nama')
+        ->orderBy('jumlah_reservasi', 'desc')
+        ->limit(5)
+        ->get();
+    
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Get 5 Tamu dengan jumlah reservasi terbanyak sukses',
+            'data' => $customerTerbanyak
+        ]);
+        
+    }
+
+
 
 }
