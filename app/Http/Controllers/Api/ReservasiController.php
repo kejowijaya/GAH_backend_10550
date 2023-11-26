@@ -415,6 +415,7 @@ class ReservasiController extends Controller
         $customerBaru = Reservasi::select(DB::raw('count(customer.id_customer) as jumlahCustomer'), DB::raw("DATE_FORMAT(reservasi.tanggal_check_out, '%M') as bulan"))
         ->join('customer', 'reservasi.id_customer', '=', 'customer.id_customer')
         ->groupBy('bulan')
+        ->orderBy('bulan', 'asc')
         ->get();
 
         return response()->json([
@@ -433,6 +434,7 @@ class ReservasiController extends Controller
         )
         ->join('customer', 'reservasi.id_customer', '=', 'customer.id_customer')
         ->groupBy('bulan')
+        ->orderBy('bulan', 'asc')
         ->get();
 
     
