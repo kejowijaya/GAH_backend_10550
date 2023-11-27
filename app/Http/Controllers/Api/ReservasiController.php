@@ -412,10 +412,14 @@ class ReservasiController extends Controller
     }
 
     public function getLaporanCustomerBaru(){
-        $customerBaru = Reservasi::select(DB::raw('count(customer.id_customer) as jumlahCustomer'), DB::raw("DATE_FORMAT(reservasi.tanggal_check_out, '%M') as bulan"))
+        $customerBaru = Reservasi::select(
+            DB::raw('count(customer.id_customer) as jumlahCustomer'), 
+            DB::raw("DATE_FORMAT(reservasi.tanggal_check_out, '%M') as bulan"),
+            DB::raw("MONTH(reservasi.tanggal_check_out) as urutanBulan"),
+        )
         ->join('customer', 'reservasi.id_customer', '=', 'customer.id_customer')
-        ->groupBy('bulan')
-        ->orderBy('bulan', 'asc')
+        ->groupBy('bulan', 'urutanBulan')
+        ->orderBy('urutanBulan', 'asc')
         ->get();
 
         return response()->json([
@@ -428,16 +432,16 @@ class ReservasiController extends Controller
     public function getLaporanPendapatanBulan(){
         $totalPendapatan = Reservasi::select(
             DB::raw("DATE_FORMAT(reservasi.tanggal_check_out, '%M') as bulan"),
+            DB::raw("MONTH(reservasi.tanggal_check_out) as urutanBulan"),            
             DB::raw('SUM(CASE WHEN customer.jenis_tamu = "personal" THEN reservasi.total_harga ELSE 0 END) as personal'),
             DB::raw('SUM(CASE WHEN customer.jenis_tamu = "grup" THEN reservasi.total_harga ELSE 0 END) as grup'),
             DB::raw('SUM(reservasi.total_harga) as total')
         )
         ->join('customer', 'reservasi.id_customer', '=', 'customer.id_customer')
-        ->groupBy('bulan')
-        ->orderBy('bulan', 'asc')
+        ->groupBy('bulan', 'urutanBulan')
+        ->orderBy('urutanBulan', 'asc')
         ->get();
 
-    
         return response()->json([
             'status' => 'success',
             'message' => 'Get total pendapatan per bulan success',
@@ -456,6 +460,7 @@ class ReservasiController extends Controller
         ->join('jenis_kamar', 'reservasi_kamar.id_jenis', '=', 'jenis_kamar.id_jenis')
         ->join('customer', 'reservasi.id_customer', '=', 'customer.id_customer')
         ->groupBy('jenis_kamar.jenis_kamar')
+        ->orderBy('total', 'desc')
         ->get();
     
         return response()->json([
