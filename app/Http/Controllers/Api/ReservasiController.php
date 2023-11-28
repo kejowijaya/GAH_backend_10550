@@ -351,10 +351,9 @@ class ReservasiController extends Controller
         }
     }
 
-    public function checkIn(Request $request){
-        $id_reservasi = $request->id_reservasi;
-        $status = $request->status;
-        $reservasi = Reservasi::find($id_reservasi);
+    public function checkIn($id){
+        $reservasi = Reservasi::find($id);
+        $status = $reservasi->status;
 
         if (is_null($reservasi)) {
             return response()->json(['message' => 'Reservation not found'], 404);
@@ -378,12 +377,18 @@ class ReservasiController extends Controller
         ]);
     }
 
-    public function checkOut(Request $request){
-        $id_reservasi = $request->id_reservasi;
-        $reservasi = Reservasi::find($id_reservasi);
+    public function checkOut($id){
+        $reservasi = Reservasi::find($id);
+        $status = $reservasi->status;
 
         if (is_null($reservasi)) {
             return response()->json(['message' => 'Reservation not found'], 404);
+        }
+
+        if($status == "Belum DP" || $status == "Batal"){
+            return response()->json(['message' => 'Customer tidak bisa check out'], 400);
+        }else if($status == "Selesai"){
+            return response()->json(['message' => 'Customer sudah check out'], 400);
         }
 
         $reservasi->tanggal_check_out = now();
