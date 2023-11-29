@@ -92,6 +92,7 @@ Route::post('batal/{id}', 'App\Http\Controllers\Api\ReservasiController@batalPes
 Route::post('cekIn/{id}', 'App\Http\Controllers\Api\ReservasiController@checkIn');
 Route::post('cekOut/{id}', 'App\Http\Controllers\Api\ReservasiController@checkOut');
 Route::post('pelunasan/{id}', 'App\Http\Controllers\Api\ReservasiController@pelunasan');
+Route::get('notaLunas/{id}', 'App\Http\Controllers\Api\ReservasiController@getNotaLunas');
 Route::get('laporan1', 'App\Http\Controllers\Api\ReservasiController@getLaporanCustomerBaru');
 Route::get('laporan2', 'App\Http\Controllers\Api\ReservasiController@getLaporanPendapatanBulan');
 Route::get('laporan3', 'App\Http\Controllers\Api\ReservasiController@getLaporanJumlahTamu');

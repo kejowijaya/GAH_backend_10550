@@ -425,7 +425,7 @@ class ReservasiController extends Controller
         }
 
         $reservasi->status = "Selesai";
-        $invoice->no_invoice = $reservasi->no_invoice;
+        $invoice->no_invoice = $reservasi->id_booking;
         $invoice->tanggal = now();
         $invoice->total_harga = $reservasi->total_harga;
         $invoice->deposit = $reservasi->deposit;
@@ -437,6 +437,22 @@ class ReservasiController extends Controller
             'status' => 'success',
             'message' => 'Pelunasan success',
             'data' => $reservasi
+        ]);
+    }
+
+    public function getNotaLunas($id){
+        $reservasi = Reservasi::with('customer', 'pegawai', 'reservasi_kamar', 'reservasi_layanan')->where('id_reservasi', $id)->first();
+        $invoice = Invoice::where('id_reservasi', $id)->first();
+
+        if (is_null($reservasi)) {
+            return response()->json(['message' => 'Reservation not found'], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Get nota lunas success',
+            'data' => $reservasi,
+            'invoice' => $invoice
         ]);
     }
 
