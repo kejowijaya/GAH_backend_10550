@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Invoice extends Model
 {
     use HasFactory;
+    
+    protected $table = 'invoice';
 
     protected $primaryKey = 'no_invoice';
     public $timestamps = false;
