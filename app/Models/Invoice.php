@@ -9,6 +9,9 @@ class Invoice extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'no_invoice';
+    public $timestamps = false;
+
     protected $fillable = [
         'id_reservasi',
         'id_pegawai',
