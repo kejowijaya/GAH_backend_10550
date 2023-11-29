@@ -372,12 +372,12 @@ class ReservasiController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Check in success',
+            'message' => 'Berhasil Check In',
             'data' => $reservasi
         ]);
     }
 
-    public function checkOut($id){
+    public function checkOut(Request $request, $id){
         $reservasi = Reservasi::find($id);
         $status = $reservasi->status;
 
@@ -398,7 +398,7 @@ class ReservasiController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Check out success',
+            'message' => 'Berhasil Check Out',
             'data' => $reservasi
         ]);
     }
