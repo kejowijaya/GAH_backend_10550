@@ -29,9 +29,9 @@ class Reservasi extends Model
         'tanggal_bayar'
     ];
 
-    public function invoices()
+    public function invoice()
     {
-        return $this->hasMany(Invoice::class);
+        return $this->hasMany(Invoice::class , 'id_reservasi', 'id_reservasi');
     }
 
     public function reservasi_kamar()

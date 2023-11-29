@@ -8,12 +8,14 @@ use Validator;
 use App\Models\Reservasi_Layanan;
 use App\Models\Reservasi;
 use App\Models\Fasilitas;
+use App\Models\Invoice;
 
 class ReservasiLayanan extends Controller
 {
     public function tambahLayanan(Request $request)
     {
         $reservasi = Reservasi::find($request->id_reservasi);
+        $invoice = Invoice::where('id_reservasi', $request->id_reservasi)->first();
         $storeData = $request->all();
         $validate = Validator::make($storeData, [
             'id_reservasi' => 'required',
@@ -29,6 +31,7 @@ class ReservasiLayanan extends Controller
             $hargaFasilitas = Fasilitas::find($fasilitas['id_fasilitas'])->harga;
         
             $reservasi_layanan = new Reservasi_Layanan();
+
             $reservasi_layanan->id_reservasi = $request->id_reservasi;
             $reservasi_layanan->id_fasilitas = $fasilitas['id_fasilitas'];
             $reservasi_layanan->jumlah = $fasilitas['jumlah'];
@@ -36,18 +39,28 @@ class ReservasiLayanan extends Controller
             $subtotalItem = $fasilitas['jumlah'] * $hargaFasilitas;
         
             $totalHarga += $subtotalItem;
-        
+
             $reservasi_layanan->total_harga = $subtotalItem;
             $reservasi_layanan->save();
         }
 
-        if($totalHarga < 300000)
-            $reservasi->deposit = $reservasi->deposit - $totalHarga;
-        else
+        if($totalHarga > $reservasi->deposit){
             $reservasi->deposit = 0;
-        
+            $reservasi->total_harga += $totalHarga;
+        }else{
+            if($totalHarga < 300000){
+                $reservasi->deposit = $reservasi->deposit - $totalHarga;
+            }
+            else{
+                $reservasi->deposit = 0;
+                $reservasi->total_harga += $totalHarga;
+            }
+        }
+       
 
         $reservasi->total_harga += $totalHarga;
+        $invoice->pajak = 0.1 * $totalHarga;
+
         $reservasi->save();
         
         return response([

@@ -10,6 +10,7 @@ use App\Models\Reservasi_Kamar;
 use App\Models\Jenis_Kamar;
 use App\Models\Kamar;
 use App\Models\Season;
+use App\Models\Invoice;
 use Illuminate\Support\Facades\DB;
 
 class ReservasiController extends Controller
@@ -121,7 +122,14 @@ class ReservasiController extends Controller
         }
         
         $reservasi->total_harga = $totalHarga;
+        $reservasi->deposit = 300000;
         $reservasi->save();
+
+        $invoice = new Invoice();
+        $invoice->id_reservasi = $reservasi->id_reservasi;
+        $invoice->nomor_invoice = $reservasi->id_booking;
+        $invoice->deposit = 0;
+        $invoice->save();
 
         return response([
             'status' => 'Success',
@@ -205,6 +213,7 @@ class ReservasiController extends Controller
 
     public function bayarReservasi(Request $request, $id){
         $reservasi = Reservasi::find($id);
+        $invoice = Invoice::where('id_reservasi', $id)->first();
         $customer = $reservasi->customer;
 
         if (is_null($reservasi)) {
@@ -221,6 +230,8 @@ class ReservasiController extends Controller
             }else{
                 $reservasi->status = "Sudah DP";
                 $reservasi->tanggal_bayar = now();
+                $invoice->jaminan = 0.5 * $reservasi->total_harga;
+                $invoice->save();
                 $reservasi->save();
                 return response()->json([
                     'status' => 'success',
@@ -234,6 +245,8 @@ class ReservasiController extends Controller
             }else{
                 $reservasi->status = "Sudah DP";
                 $reservasi->tanggal_bayar = now();
+                $invoice->jaminan = $reservasi->total_harga;
+                $invoice->save();
                 $reservasi->save();
                 return response()->json([
                     'status' => 'success',
@@ -403,17 +416,21 @@ class ReservasiController extends Controller
         ]);
     }
 
-    public function pelunasan(Request $request){
-        $id_reservasi = $request->id_reservasi;
-        $reservasi = Reservasi::find($id_reservasi);
+    public function pelunasan(Request $request, $id){
+        $reservasi = Reservasi::find($id);
+        $invoice = Invoice::where('id_reservasi', $id)->first();
 
         if (is_null($reservasi)) {
             return response()->json(['message' => 'Reservation not found'], 404);
         }
 
         $reservasi->status = "Selesai";
-        //hitung total harga di invoice
-
+        $invoice->no_invoice = $reservasi->no_invoice;
+        $invoice->tanggal = now();
+        $invoice->total_harga = $reservasi->total_harga;
+        $invoice->deposit = $reservasi->deposit;
+        $invoice->cash = $invoice->total_harga - $invoice->deposit - $invoice->jaminan;
+        $invoice->save();
         $reservasi->save();
 
         return response()->json([
