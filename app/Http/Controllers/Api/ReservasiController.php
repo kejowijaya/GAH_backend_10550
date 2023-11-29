@@ -435,7 +435,8 @@ class ReservasiController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Bayar reservasi success',
-                'data' => $reservasi
+                'data' => $reservasi,
+                'kembalian' => $uang - $reservasi->total_harga
             ]);
         }
 
