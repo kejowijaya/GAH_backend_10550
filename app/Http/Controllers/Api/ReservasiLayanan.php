@@ -58,9 +58,7 @@ class ReservasiLayanan extends Controller
         }
 
         $reservasi->total_harga += $totalHarga;
-        $invoice->pajak = 0.1 * $totalHarga;
 
-        $invoice->save();
         $reservasi->save();
         
         return response([
