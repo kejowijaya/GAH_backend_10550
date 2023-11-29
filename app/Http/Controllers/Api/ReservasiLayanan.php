@@ -6,12 +6,14 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Validator;
 use App\Models\Reservasi_Layanan;
+use App\Models\Reservasi;
 use App\Models\Fasilitas;
 
 class ReservasiLayanan extends Controller
 {
     public function tambahLayanan(Request $request)
     {
+        $reservasi = Reservasi::find($request->id_reservasi);
         $storeData = $request->all();
         $validate = Validator::make($storeData, [
             'id_reservasi' => 'required',
@@ -38,6 +40,15 @@ class ReservasiLayanan extends Controller
             $reservasi_layanan->total_harga = $subtotalItem;
             $reservasi_layanan->save();
         }
+
+        if($totalHarga < 300000)
+            $reservasi->deposit = $reservasi->deposit - $totalHarga;
+        else
+            $reservasi->deposit = 0;
+        
+
+        $reservasi->total_harga += $totalHarga;
+        $reservasi->save();
         
         return response([
             'message' => 'Add Reservasi Layanan Success',
