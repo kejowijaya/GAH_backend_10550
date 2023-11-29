@@ -406,7 +406,7 @@ class ReservasiController extends Controller
 
         $reservasi->tanggal_check_out = now();
         $reservasi->id_fo = $request->id_fo;
-        $reservasi->status = "Selesai";
+        $reservasi->status = "Check Out";
         $reservasi->save();
 
         return response()->json([
