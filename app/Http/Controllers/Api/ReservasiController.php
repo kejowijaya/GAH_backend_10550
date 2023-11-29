@@ -416,6 +416,20 @@ class ReservasiController extends Controller
         ]);
     }
 
+    public function bayar(Request $request, $id){
+        $reservasi = Reservasi::find($id);
+        $invoice = Invoice::where('id_reservasi', $id)->first();
+        $customer = $reservasi->customer;
+
+        if (is_null($reservasi)) {
+            return response()->json(['message' => 'Reservation not found'], 404);
+        }
+
+        if($reservasi->status == "Selesai"){
+            return response()->json(['message' => 'Reservasi sudah dibayar'], 400);
+        }
+    }
+
     public function pelunasan(Request $request, $id){
         $reservasi = Reservasi::find($id);
         $invoice = Invoice::where('id_reservasi', $id)->first();
@@ -427,7 +441,7 @@ class ReservasiController extends Controller
         $reservasi->status = "Selesai";
         $invoice->no_invoice = $reservasi->id_booking;
         $invoice->tanggal = now();
-        $invoice->total_harga = $reservasi->total_harga;
+        $invoice->total_harga = $reservasi->total_harga + $invoice->pajak;
         $invoice->deposit = $reservasi->deposit;
         $invoice->cash = $invoice->total_harga - $invoice->deposit - $invoice->jaminan;
         $invoice->save();
