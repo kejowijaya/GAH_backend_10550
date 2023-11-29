@@ -419,8 +419,9 @@ class ReservasiController extends Controller
     public function bayar(Request $request, $id){
         $reservasi = Reservasi::find($id);
         $invoice = Invoice::where('id_reservasi', $id)->first();
-        $customer = $reservasi->customer;
+        $uang = $request->uang;
 
+       
         if (is_null($reservasi)) {
             return response()->json(['message' => 'Reservation not found'], 404);
         }
@@ -428,6 +429,17 @@ class ReservasiController extends Controller
         if($reservasi->status == "Selesai"){
             return response()->json(['message' => 'Reservasi sudah dibayar'], 400);
         }
+
+        if($uang < $invoice->total_harga){
+            return response()->json(['message' => 'Uang kurang'], 400);
+        }else{
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Bayar reservasi success',
+                'data' => $reservasi
+            ]);
+        }
+
     }
 
     public function pelunasan(Request $request, $id){
