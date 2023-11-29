@@ -127,7 +127,7 @@ class ReservasiController extends Controller
 
         $invoice = new Invoice();
         $invoice->id_reservasi = $reservasi->id_reservasi;
-        $invoice->nomor_invoice = $reservasi->id_booking;
+        $invoice->no_invoice = $reservasi->id_booking;
         $invoice->deposit = 0;
         $invoice->save();
 
