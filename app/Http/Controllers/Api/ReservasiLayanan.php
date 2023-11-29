@@ -56,7 +56,6 @@ class ReservasiLayanan extends Controller
                 $reservasi->total_harga += $totalHarga;
             }
         }
-       
 
         $reservasi->total_harga += $totalHarga;
         $invoice->pajak = 0.1 * $totalHarga;

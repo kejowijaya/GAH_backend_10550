@@ -444,13 +444,17 @@ class ReservasiController extends Controller
         $invoice->total_harga = $reservasi->total_harga + $invoice->pajak;
         $invoice->deposit = $reservasi->deposit;
         $invoice->cash = $invoice->total_harga - $invoice->deposit - $invoice->jaminan;
+        if($invoice->cash < 0){
+            $invoice->cash = 0;
+        }
         $invoice->save();
         $reservasi->save();
 
         return response()->json([
             'status' => 'success',
             'message' => 'Pelunasan success',
-            'data' => $reservasi
+            'data' => $reservasi,
+            'invoice' => $invoice
         ]);
     }
 
